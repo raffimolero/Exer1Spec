@@ -1,0 +1,14 @@
+body {
+    padding: 25px;
+}
+
+* {
+    font-family: "Varela Round", serif;
+    font-weight: 400;
+    font-style: normal;
+    padding: 5px;
+}
+
+.title {
+    color: #5C6AC4;
+}
