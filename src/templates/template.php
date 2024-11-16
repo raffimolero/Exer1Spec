@@ -13,6 +13,9 @@
 
 <body>
     <h1>~ Tropixotics ~</h1>
+    <a href="/index.html">Home</a>
+    <a href="/login.html">Log in</a>
+    <a href="/register.html">Sign up</a>
     <?= $body ?>
     <p>See you soon~</p>
 </body>

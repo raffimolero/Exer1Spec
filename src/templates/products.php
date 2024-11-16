@@ -26,7 +26,7 @@ $columns = ['category', 'item', 'stock', 'image'];
                     <h3><?= htmlspecialchars($stock) ?></h3>
                 </td>
                 <td>
-                    <?= render('image', [
+                    <?= render('img', [
                         'name' => $item,
                         'url' => $image,
                     ]) ?>

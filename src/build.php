@@ -1,44 +1,32 @@
 <?php require_once 'init.php';
 
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
-const DEST = '../molero';
+define('DEST', '../' . trim(getenv('TARGET'), '"'));
 const INDEX = 'index.php';
+const ASSETS = 'assets';
 const MODELS = 'models';
 const TEMPLATES = 'templates';
 const VIEWS = 'views';
 
 function d($x)
 {
-    echo "DEBUG: $x\n";
+    echo "DEBUG: '$x'\n";
     return $x;
 }
 
-function dir_entries($dir)
+// https://stackoverflow.com/a/4517270
+function extract_substr($str, $prefix, $suffix)
 {
-    return array_diff(scandir($dir), ['.', '..']);
+    $start = '^' . preg_quote($prefix, '/');
+    $end = preg_quote($suffix, '/') . '$';
+    return preg_replace("/$start|$end/", '', $str);
 }
 
-// https://stackoverflow.com/a/3338133
-function rm_rf($dir)
+function view_path($file)
 {
-    foreach (dir_entries($dir) as $file) {
-        $path = "$dir/$file";
-        if (is_dir($path) && !is_link($path)) {
-            rm_rf($path);
-        } else {
-            unlink($path);
-        }
-    }
-    return rmdir($dir);
-}
-
-// https://stackoverflow.com/questions/193794/how-can-i-change-a-files-extension-using-php#comment31326878_7296238
-function replace_extension($path, $ext)
-{
-    $info = pathinfo($path);
-    $dir = $info['dirname'];
-    $name = $info['filename'];
-    return "$dir/$name.$ext";
+    $prefix = __DIR__ . DIRECTORY_SEPARATOR . VIEWS . DIRECTORY_SEPARATOR;
+    $suffix = '.php';
+    return extract_substr($file, $prefix, $suffix);
 }
 
 function build_file($file)
@@ -50,21 +38,26 @@ function build_file($file)
     copy($file, DEST . "/$file");
 }
 
-function build_php($file)
+function is_template($file)
 {
-    $line = fgets(fopen($file, 'r'));
-    if (!str_starts_with($line, '<?php require')) {
-        build_file($file);
+    return str_ends_with($file, '.php') and str_starts_with(fgets(fopen($file, 'r')), '<!DOCTYPE html>');
+}
+
+function build_view($file)
+{
+    $dest = DEST . "/$file";
+    $src = "views/$file";
+    if (!is_template($src)) {
+        copy($src, $dest);
         return;
     }
 
-    $html = render_direct($file, array());
+    $html = render_direct($src, array());
     if (!$html) {
         return;
     }
-    $file = replace_extension($file, 'html');
-    $dest = fopen(DEST . "/$file", 'w');
-    fwrite($dest, $html);
+    $dest = replace_extension($dest, 'html');
+    file_put_contents($dest, $html);
 }
 
 function build_dir($dir)
@@ -95,22 +88,22 @@ function build_models($dir)
 
 function build_views($dir)
 {
-    mkdir(DEST . "/$dir");
-    foreach (dir_entries($dir) as $entry) {
+    foreach (dir_entries(VIEWS . "/$dir") as $entry) {
         $path = "$dir/$entry";
-        if (is_dir($path)) {
+        if (is_dir(VIEWS . "/$path")) {
+            mkdir(DEST . "/$path");
             build_views($path);
-        } else if (str_ends_with($entry, '.php')) {
-            build_php($path);
         } else {
-            build_file($path);
+            build_view($path);
         }
     }
 }
 
 function build()
 {
+    echo "Downloading assets...\n";
     mkdir(DEST);
+    mkdir(DEST . "/" . ASSETS);
     foreach (dir_entries('.') as $path) {
         switch ($path) {
             case TEMPLATES:
@@ -119,7 +112,7 @@ function build()
                 build_models($path);
                 break;
             case VIEWS:
-                build_views($path);
+                build_views('.');
                 break;
             default:
                 if (is_dir($path)) {
@@ -127,13 +120,7 @@ function build()
                 }
         }
     }
-    $dest = DEST;
-    $views = VIEWS;
-    `mv $dest/$views/* $dest`;
-    rmdir("$dest/$views");
+    echo "Done.\n";
 }
 
-if (file_exists(DEST)) {
-    rm_rf(DEST);
-}
 build();

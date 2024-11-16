@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php'; ?>
+<!DOCTYPE html>
 <?php $entries = csv_read('customers'); ?>
 
 <table>
