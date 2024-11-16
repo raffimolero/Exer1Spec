@@ -1,2 +1,6 @@
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php'; ?>
-<?php redirect('register'); ?>
+
+<?= render('template', [
+    'title' => 'Home',
+    'body' => render('products', []),
+]) ?>

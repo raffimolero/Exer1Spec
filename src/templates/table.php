@@ -1,6 +1,6 @@
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php'; ?>
-<?php $entries = csv_read('customers'); ?>
 
+<?php $entries = csv_read($table) ?>
 <table>
     <?php if ($entries) : ?>
         <?php foreach ($entries as $data) : ?>
@@ -14,9 +14,3 @@
         <h1>[No data.]</h1>
     <?php endif; ?>
 </table>
-
-<p>
-    <a href="/views/index.html">
-        <p>HOME PAGE</p>
-    </a>
-</p>

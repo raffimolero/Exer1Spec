@@ -1,5 +1,6 @@
 body {
     padding: 25px;
+    text-align: center;
 }
 
 * {
@@ -7,8 +8,13 @@ body {
     font-weight: 400;
     font-style: normal;
     padding: 5px;
+    text-align: center;
 }
 
 .title {
     color: #5C6AC4;
+}
+
+img {
+    height: 10vh;
 }

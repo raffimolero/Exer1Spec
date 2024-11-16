@@ -1,11 +1,6 @@
 <?php
 require_once 'models/csv.php';
 
-function redirect($page)
-{
-    header('Location: ' . '/views/' . $page . '.php');
-}
-
 function render_direct($path, $data)
 {
     ob_start();
@@ -16,6 +11,6 @@ function render_direct($path, $data)
 
 function render($view, $data)
 {
-    $path = $_SERVER['DOCUMENT_ROOT'] . '/templates/' . $view . '.php';
+    $path = "{$_SERVER['DOCUMENT_ROOT']}/templates/$view.php";
     return render_direct($path, $data);
 }
