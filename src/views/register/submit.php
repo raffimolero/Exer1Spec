@@ -12,7 +12,7 @@ foreach ($keys as $key) {
     $data[] = $_POST[$key];
 }
 
-$fileHandle = fopen('../data/customers.csv', 'a');
+$fileHandle = fopen('../models/customers.csv', 'a');
 $success = $fileHandle !== false;
 
 $path = 'error';

@@ -1,5 +1,3 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php'; ?>
-
 <?php
 $data = csv_read('products');
 $columns = ['category', 'item', 'stock', 'image'];

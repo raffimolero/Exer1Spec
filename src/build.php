@@ -10,20 +10,6 @@ const MODELS = 'models';
 const TEMPLATES = 'templates';
 const VIEWS = 'views';
 
-function d($x)
-{
-    echo "DEBUG: '$x'\n";
-    return $x;
-}
-
-// https://stackoverflow.com/a/4517270
-function extract_substr($str, $prefix, $suffix)
-{
-    $start = '^' . preg_quote($prefix, '/');
-    $end = preg_quote($suffix, '/') . '$';
-    return preg_replace("/$start|$end/", '', $str);
-}
-
 function view_path($file)
 {
     $prefix = __DIR__ . DIRECTORY_SEPARATOR . VIEWS . DIRECTORY_SEPARATOR;
@@ -92,9 +78,6 @@ function register_template($name, $template)
 {
     global $templates;
 
-    if (!$template['path']) {
-        return;
-    }
     if (array_key_exists($name, $templates)) {
         error_log("Redefined $name");
         return;
@@ -102,27 +85,32 @@ function register_template($name, $template)
     $templates[$name] = $template;
 }
 
-function build_templates($dir)
+function build_templates($base, $dir)
 {
-    global $templates;
-
-    $template = ['path' => false, 'props' => []];
+    $children = [];
+    $template = ['base' => $base, 'path' => false, 'props' => []];
     foreach (dir_entries($dir) as $entry) {
         $path = "$dir/$entry";
         if (is_dir($path)) {
-            build_templates($path);
+            $children[] = $path;
         } else if ($entry === '.php') {
             $template['path'] = $path;
         } else if (str_ends_with($entry, '.php')) {
             $name = basename($entry, '.php');
             if (str_starts_with($entry, '$')) {
-                $template['props'][$name] = $path;
-            } else {
+                $template['props'][extract_substr($name, '$', '')] = $path;
+            } else if (!str_starts_with($entry, '_')) {
                 register_template($name, ['path' => $path, 'props' => []]);
             }
         }
     }
-    register_template(basename($dir), $template);
+    if ($template['path']) {
+        $base = basename($dir);
+        register_template($base, $template);
+    }
+    foreach ($children as $child) {
+        build_templates($base, $child);
+    }
 }
 
 function build_views($dir)
@@ -152,7 +140,7 @@ function build()
                 build_models($path);
                 break;
             case TEMPLATES:
-                build_templates($path);
+                build_templates(null, $path);
                 break;
             case VIEWS:
                 build_views('.');
