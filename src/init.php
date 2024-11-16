@@ -20,24 +20,26 @@ function render_direct($path, $data)
 
 function render($view, $data)
 {
+    global $iters;
     global $templates;
 
-    do {
-        $template = $templates[$view];
-        if (!array_key_exists($view, $templates)) {
-            error_log("tried to load $view");
-            return "<h1>ERROR</h1>";
-        };
-        $path = $template['path'];
-        $data = array_merge($data, include_with($path, $data) ?? []);
-        $props = array_map(
-            function ($prop) use ($data) {
-                return render_direct($prop, $data);
-            },
-            $template['props'],
-        );
-        $data = array_merge($props, $data);
-        // $view = $template['base'];
-        $view = null; // HACK
-    } while ($view !== null);
+    if ($view === null) {
+        return;
+    }
+
+    $template = $templates[$view];
+    if (!array_key_exists($view, $templates)) {
+        error_log("tried to load $view");
+        return "<h1>ERROR</h1>";
+    };
+    $path = $template['path'];
+    $props = array_map(
+        function ($prop) use ($data) {
+            return render_direct($prop, $data);
+        },
+        $template['props'],
+    );
+    $data = array_merge($data, $props);
+    $data = array_merge($data, include_with($path, $data) ?? []);
+    render($template['base'], $data);
 }

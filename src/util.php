@@ -1,8 +1,10 @@
 <?php
 
-function d($x, $msg = 'no message')
+function dbg($x, $msg = 'no message')
 {
     error_log("DEBUG: $msg");
+    // error_log("BACKTRACE:");
+    // prettyPrintArray(debug_backtrace());
     prettyPrintArray($x);
     return $x;
 }
@@ -20,6 +22,10 @@ function extract_substr($str, $prefix, $suffix)
 function prettyPrintArray($array, $indent = 1)
 {
     if (is_array($array)) {
+        if ($indent > 2) {
+            error_log(str_repeat("    ", $indent) . "...[" . count($array) . " element(s) omitted]");
+            return;
+        }
         foreach ($array as $key => $value) {
             $start = str_repeat("    ", $indent) . $key . " => ";
             if (is_array($value)) {

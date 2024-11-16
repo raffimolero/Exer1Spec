@@ -33,6 +33,7 @@ function is_template($file)
 
 function build_view($file)
 {
+    dbg($file, 'building view...');
     $dest = DEST . "/$file";
     $src = "views/$file";
     if (!is_template($src)) {
@@ -87,12 +88,17 @@ function register_template($name, $template)
 
 function build_templates($base, $dir)
 {
-    $children = [];
-    $template = ['base' => $base, 'path' => false, 'props' => []];
+    $child_dirs = [];
+    $child_files = [];
+    $template = [
+        'base' => $base,
+        'path' => false,
+        'props' => [],
+    ];
     foreach (dir_entries($dir) as $entry) {
         $path = "$dir/$entry";
         if (is_dir($path)) {
-            $children[] = $path;
+            $child_dirs[] = $path;
         } else if ($entry === '.php') {
             $template['path'] = $path;
         } else if (str_ends_with($entry, '.php')) {
@@ -100,15 +106,23 @@ function build_templates($base, $dir)
             if (str_starts_with($entry, '$')) {
                 $template['props'][extract_substr($name, '$', '')] = $path;
             } else if (!str_starts_with($entry, '_')) {
-                register_template($name, ['path' => $path, 'props' => []]);
+                $child_files[$name] = $path;
             }
         }
     }
     if ($template['path']) {
-        $base = basename($dir);
-        register_template($base, $template);
+        $name = basename($dir);
+        register_template($name, $template);
+        $base = $name;
     }
-    foreach ($children as $child) {
+    foreach ($child_files as $name => $path) {
+        register_template($name, [
+            'base' => $base,
+            'path' => $path,
+            'props' => [],
+        ]);
+    }
+    foreach ($child_dirs as $child) {
         build_templates($base, $child);
     }
 }
@@ -134,16 +148,16 @@ function build()
     echo "Downloading assets...\n";
     mkdir(DEST);
     mkdir(DEST . "/" . ASSETS);
+    build_models(MODELS);
+    build_templates(null, TEMPLATES);
+    global $templates;
+    dbg($templates);
+    build_views('.');
     foreach (dir_entries('.') as $path) {
         switch ($path) {
             case MODELS:
-                build_models($path);
-                break;
             case TEMPLATES:
-                build_templates(null, $path);
-                break;
             case VIEWS:
-                build_views('.');
                 break;
             default:
                 if (is_dir($path)) {

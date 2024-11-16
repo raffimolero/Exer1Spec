@@ -1,7 +1,6 @@
-<?php require_once 'control.php';
+<?php require_once '_.php';
 $asset = ASSETS . "/$name.jpeg";
-// TODO:
-// download_image($url, $asset);
+download_image($url, $asset);
 ?>
 
 <img src="<?= $asset ?>" alt="(image of <?= $name ?>)">

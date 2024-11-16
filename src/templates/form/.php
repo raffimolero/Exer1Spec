@@ -10,7 +10,4 @@
     <?php endforeach; ?>
     <input type="submit" name=<?= $name ?> id="submit" value=<?= $submit ?>>
 </form>
-<?= render('script', [
-    'page' => $page,
-    'fields' => $fields,
-]) ?>
+<?= $script ?>
