@@ -1,5 +1,3 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php'; ?>
-
 <?php ob_start(); ?>
 <form name=<?= $name ?> action=<?= "/controllers/" . $path . "/submit.php" ?> onsubmit="return validate()" method="post">
     <?php foreach ($fields as $key => $val) : ?>

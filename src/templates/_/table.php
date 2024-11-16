@@ -1,5 +1,3 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/init.php'; ?>
-
 <?php $entries = csv_read($table) ?>
 <table>
     <?php if ($entries) : ?>

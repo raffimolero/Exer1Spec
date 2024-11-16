@@ -1,6 +1,8 @@
 <?php require_once 'init.php';
 
+$build = false;
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
+
 define('DEST', '../' . trim(getenv('TARGET'), '"'));
 const INDEX = 'index.php';
 const ASSETS = 'assets';
@@ -86,6 +88,43 @@ function build_models($dir)
     }
 }
 
+function register_template($name, $template)
+{
+    global $templates;
+
+    if (!$template['path']) {
+        return;
+    }
+    if (array_key_exists($name, $templates)) {
+        error_log("Redefined $name");
+        return;
+    }
+    $templates[$name] = $template;
+}
+
+function build_templates($dir)
+{
+    global $templates;
+
+    $template = ['path' => false, 'props' => []];
+    foreach (dir_entries($dir) as $entry) {
+        $path = "$dir/$entry";
+        if (is_dir($path)) {
+            build_templates($path);
+        } else if ($entry === '.php') {
+            $template['path'] = $path;
+        } else if (str_ends_with($entry, '.php')) {
+            $name = basename($entry, '.php');
+            if (str_starts_with($entry, '$')) {
+                $template['props'][$name] = $path;
+            } else {
+                register_template($name, ['path' => $path, 'props' => []]);
+            }
+        }
+    }
+    register_template(basename($dir), $template);
+}
+
 function build_views($dir)
 {
     foreach (dir_entries(VIEWS . "/$dir") as $entry) {
@@ -101,15 +140,19 @@ function build_views($dir)
 
 function build()
 {
+    global $build;
+    $build = true;
+
     echo "Downloading assets...\n";
     mkdir(DEST);
     mkdir(DEST . "/" . ASSETS);
     foreach (dir_entries('.') as $path) {
         switch ($path) {
-            case TEMPLATES:
-                break;
             case MODELS:
                 build_models($path);
+                break;
+            case TEMPLATES:
+                build_templates($path);
                 break;
             case VIEWS:
                 build_views('.');
@@ -121,6 +164,8 @@ function build()
         }
     }
     echo "Done.\n";
+
+    $build = false;
 }
 
 build();
