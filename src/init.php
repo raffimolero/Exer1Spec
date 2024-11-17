@@ -35,7 +35,11 @@ function render($view, $data)
     };
     $path = $template['path'];
     $props = array_map(
-        function ($prop) use ($data) {
+        function ($prop) use ($data, $template) {
+            if ($template['lib']) {
+                extract($data);
+                include_once $template['lib'];
+            }
             return render_direct($prop, $data);
         },
         $template['props'],

@@ -1,4 +1,3 @@
-<?php require_once '_.php'; ?>
 <script>
     function validate() {
         err = '';
