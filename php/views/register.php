@@ -35,7 +35,9 @@
             'contain at least one CAPITAL LETTER' => '/[A-Z]/',
             'contain at least 8 characters' => '/.{8}/',
         ]],
-        ['Confirm Password', 'confirmpassword', 'password', 're-type password', ['match Password' => 'confirmpassword.value !== password.value']],
+        ['Confirm Password', 'confirmpassword', 'password', 're-type password', [
+            'match Password' => 'confirmpassword.value !== password.value'
+        ]],
     ],
 ]) ?>
 <?php $body = ob_get_clean(); ?>
