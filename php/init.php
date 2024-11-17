@@ -5,19 +5,44 @@ require_once 'util.php';
 
 $templates = [];
 
-function render_direct($_path, $_data)
+function render_direct($_path, $_data, $_once = false, $_merge = true)
 {
-    unset($_data['_path']);
-    ob_start();
+    // validate input
+    foreach ($_data as $key => $val) {
+        if (str_starts_with($key, '_')) {
+            dbg($_data, "ERROR: tried to render with special path from $_path");
+            return;
+        }
+    }
+
+    // perform include
     extract($_data);
-    include $_path;
-    unset($_data);
+    ob_start();
+    if ($_once) {
+        include_once $_path;
+    } else {
+        include $_path;
+    }
+
+    // append newly defined globals to data
+    if ($_merge) {
+        $_data = get_defined_vars();
+    }
+
+    // sanitize input
+    foreach ($_data as $key => $val) {
+        if (str_starts_with($key, '_')) {
+            unset($_data[$key]);
+        }
+    }
+
     return [
-        'data' => get_defined_vars(),
         'html' => ob_get_clean(),
+        'data' => $_data,
     ];
 }
 
+// recursively render the specified view with $data as context
 function view($view, $data)
 {
     global $templates;
@@ -32,8 +57,10 @@ function view($view, $data)
 
         $path = $template['path'];
         if ($template['lib']) {
-            extract($data);
-            include_once $template['lib'];
+            $data = array_merge(
+                $data,
+                render_direct($template['lib'], $data, true)['data'],
+            );
         }
 
         $props = array_map(
