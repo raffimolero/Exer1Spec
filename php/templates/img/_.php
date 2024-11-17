@@ -10,7 +10,7 @@ function download_image($url, $path)
 
 function jpegify($file)
 {
-    `magick "$file" "$file"`;
+    `convert "$file" "$file"`;
 }
 
 // from chatgpt

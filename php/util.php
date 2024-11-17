@@ -22,7 +22,7 @@ function extract_substr($str, $prefix, $suffix)
 function prettyPrintArray($array, $indent = 1)
 {
     if (is_array($array)) {
-        if ($indent > 2) {
+        if ($indent > 3) {
             error_log(str_repeat("    ", $indent) . "...[" . count($array) . " element(s) omitted]");
             return;
         }

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <?php ob_start(); ?>
-<?= render('products', []) ?>
+<?= view('products', []) ?>
 <?php $body = ob_get_clean(); ?>
 
-<?= render('template', [
+<?= view('template', [
     'title' => 'Home',
     'body' => $body,
 ]) ?>
