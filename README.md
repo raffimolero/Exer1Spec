@@ -2,7 +2,9 @@ the ACTUAL exer1 is inside the molero folder. since i'm preprocessing stuff to m
 
 please install WSL and docker then type `./run` to run the program.
 
-i'm convinced this program is actual black magic. like, you cannot write a Windows -> batch -> WSL -> Docker -> php -> html is the closest thing i have ever made to actual black ma
+i'm convinced this program is actual black magic. like, i haven't seen anything more arcane than this.
+
+harry potter got that expelliarmus while i got Windows -> batch -> WSL -> Docker -> php -> html. damn.
 
 -   name of site: Tropixotics
 -   title format: Home - Tropixotics
