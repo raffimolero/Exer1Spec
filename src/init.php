@@ -40,6 +40,11 @@ function render($view, $data)
         $template['props'],
     );
     $data = array_merge($data, $props);
-    $data = array_merge($data, include_with($path, $data) ?? []);
+    dbg(['view' => $view, 'template' => $template], 'trying to render');
+    if ($template['lib']) {
+        extract($data);
+        include_once $template['lib'];
+    }
+    $data = include_with($path, $data);
     render($template['base'], $data);
 }

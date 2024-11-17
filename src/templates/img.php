@@ -1,4 +1,4 @@
-<?php require_once '_.php';
+<?php
 $asset = ASSETS . "/$name.jpeg";
 download_image($url, $asset);
 ?>

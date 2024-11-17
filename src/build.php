@@ -75,7 +75,23 @@ function build_models($dir)
     }
 }
 
-function register_template($name, $template)
+function register_template($name, $base, $path)
+{
+    global $templates;
+
+    if (array_key_exists($name, $templates)) {
+        error_log("Redefined $name");
+        return;
+    }
+    $templates[$name] = [
+        'base' => $base,
+        'path' => $path,
+        'lib' => false,
+        'props' => [],
+    ];
+}
+
+function update_template($name, $template)
 {
     global $templates;
 
@@ -88,39 +104,53 @@ function register_template($name, $template)
 
 function build_templates($base, $dir)
 {
+    global $templates;
+
     $child_dirs = [];
     $child_files = [];
-    $template = [
-        'base' => $base,
-        'path' => false,
-        'props' => [],
-    ];
+    $name = basename($dir);
+    $template = $templates[$name] ?? false;
+    dbg([
+        'name' => $name,
+        'template' => $template,
+        'exist' => $templates,
+    ], 'before');
+    if ($template) {
+        if (file_exists("$dir/_.php")) {
+            $template['lib'] = "$dir/_.php";
+        }
+        dbg(['name' => $name, 'template' => $template], 'exists');
+    }
     foreach (dir_entries($dir) as $entry) {
         $path = "$dir/$entry";
         if (is_dir($path)) {
             $child_dirs[] = $path;
         } else if ($entry === '.php') {
-            $template['path'] = $path;
+            // TODO: directory templates. why am i doing this.
+            // $template['path'] = $path;
         } else if (str_ends_with($entry, '.php')) {
-            $name = basename($entry, '.php');
+            $subname = basename($entry, '.php');
             if (str_starts_with($entry, '$')) {
-                $template['props'][extract_substr($name, '$', '')] = $path;
+                if ($template) {
+                    $template['props'][extract_substr($subname, '$', '')] = $path;
+                }
             } else if (!str_starts_with($entry, '_')) {
-                $child_files[$name] = $path;
+                $child_files[$subname] = $path;
             }
         }
     }
-    if ($template['path']) {
-        $name = basename($dir);
-        register_template($name, $template);
+    if ($template) {
         $base = $name;
+        dbg($template, "attempting to set $name");
+        $templates[$name] = $template;
     }
     foreach ($child_files as $name => $path) {
-        register_template($name, [
-            'base' => $base,
+        dbg([
+            'name' => $name,
             'path' => $path,
-            'props' => [],
-        ]);
+            'dir' => $dir
+        ], 'registering');
+        register_template($name, $base, $path,);
     }
     foreach ($child_dirs as $child) {
         build_templates($base, $child);
@@ -150,8 +180,8 @@ function build()
     mkdir(DEST . "/" . ASSETS);
     build_models(MODELS);
     build_templates(null, TEMPLATES);
-    global $templates;
-    dbg($templates);
+    // global $templates;
+    // dbg($templates);
     build_views('.');
     foreach (dir_entries('.') as $path) {
         switch ($path) {
