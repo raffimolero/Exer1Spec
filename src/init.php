@@ -20,8 +20,9 @@ function render_direct($path, $data)
 
 function render($view, $data)
 {
-    global $iters;
     global $templates;
+
+    dbg(['view' => $view, 'data' => $data], 'start');
 
     if ($view === null) {
         return;
@@ -39,12 +40,16 @@ function render($view, $data)
         },
         $template['props'],
     );
+    dbg([
+        'data' => $data,
+        'view' => $view,
+        'template' => $template,
+    ], 'trying to render');
     $data = array_merge($data, $props);
-    dbg(['view' => $view, 'template' => $template], 'trying to render');
     if ($template['lib']) {
         extract($data);
         include_once $template['lib'];
     }
-    $data = include_with($path, $data);
+    include_with($path, $data);
     render($template['base'], $data);
 }

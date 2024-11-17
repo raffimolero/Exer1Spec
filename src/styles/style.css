@@ -11,6 +11,10 @@ body {
     text-align: center;
 }
 
+input {
+    width: 15vw;
+}
+
 .title {
     color: #5C6AC4;
 }
