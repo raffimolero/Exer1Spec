@@ -14,7 +14,7 @@
         if (success) {
             alert('Registered.');
         } else {
-            alert('Failed to register:\n\n' + err);
+            alert('Failed to register:\n' + err);
         }
         return success;
     }
