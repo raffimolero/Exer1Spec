@@ -4,6 +4,7 @@ require_once 'io.php';
 require_once 'util.php';
 
 $templates = [];
+$root = null;
 
 function render_direct($_path, $_data, $_once = false)
 {
@@ -14,6 +15,10 @@ function render_direct($_path, $_data, $_once = false)
             return;
         }
     }
+
+    // HACK: manually include root
+    global $root;
+    $_data['root'] = $root;
 
     // perform include
     extract($_data);

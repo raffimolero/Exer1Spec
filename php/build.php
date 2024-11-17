@@ -3,7 +3,8 @@
 $build = false;
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
 
-define('DEST', trim(getenv('TARGET'), '"'));
+const NAME = 'molero';
+define('DEST', trim(getenv('TARGET'), '"') . '/' . NAME);
 const INDEX = 'index.php';
 const ASSETS = 'assets';
 const MODELS = 'models';
@@ -35,6 +36,12 @@ function is_template($file)
     return str_ends_with($file, '.php') and str_starts_with(fgets(fopen($file, 'r')), '<!DOCTYPE html>');
 }
 
+function path_to_root($path)
+{
+    $depth = substr_count($path, '/') - substr_count($path, './');
+    return $depth <= 0 ? '.' : '..' . str_repeat('/..', $depth - 1);
+}
+
 function build_view($file)
 {
     dbg($file, 'building view...');
@@ -45,6 +52,9 @@ function build_view($file)
         return;
     }
 
+    // HACK: manual root path
+    global $root;
+    $root = path_to_root($file);
     $html = render_direct($src, [])['html'];
     if (!$html) {
         return;
@@ -180,6 +190,7 @@ function build()
     $build = true;
 
     echo "Downloading assets...\n";
+    mkdir(DEST);
     mkdir(DEST . "/" . ASSETS);
     build_models(MODELS);
     build_templates(null, TEMPLATES);
@@ -199,6 +210,9 @@ function build()
                 }
         }
     }
+    $dest = DEST;
+    $name = NAME;
+    `cd $dest && zip -r ../$name.zip *`;
     echo "Done.\n";
 
     $build = false;
