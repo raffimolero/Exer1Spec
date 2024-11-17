@@ -1,3 +1,2 @@
 <!DOCTYPE html>
-<?php $title = 'Register' ?>
-<?= view('success', []) ?>
+<?= view('success', ['title' => 'Register']) ?>

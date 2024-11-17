@@ -5,7 +5,7 @@ require_once 'util.php';
 
 $templates = [];
 
-function render_direct($_path, $_data, $_once = false, $_merge = true)
+function render_direct($_path, $_data, $_once = false)
 {
     // validate input
     foreach ($_data as $key => $val) {
@@ -25,20 +25,19 @@ function render_direct($_path, $_data, $_once = false, $_merge = true)
     }
 
     // append newly defined globals to data
-    if ($_merge) {
-        $_data = get_defined_vars();
-    }
+    $_data = array_merge($_data, get_defined_vars());
 
-    // sanitize input
+    // sanitize data
     foreach ($_data as $key => $val) {
         if (str_starts_with($key, '_')) {
             unset($_data[$key]);
         }
     }
 
+    // output
     return [
-        'html' => ob_get_clean(),
         'data' => $_data,
+        'html' => ob_get_clean(),
     ];
 }
 
@@ -57,10 +56,8 @@ function view($view, $data)
 
         $path = $template['path'];
         if ($template['lib']) {
-            $data = array_merge(
-                $data,
-                render_direct($template['lib'], $data, true)['data'],
-            );
+            $d2 = render_direct($template['lib'], $data, true)['data'];
+            $data = array_merge($data, $d2,);
         }
 
         $props = array_map(
