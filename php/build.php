@@ -41,7 +41,7 @@ function build_view($file)
         return;
     }
 
-    $html = render_direct($src, array());
+    $html = render_direct($src, [])['html'];
     if (!$html) {
         return;
     }
@@ -49,6 +49,7 @@ function build_view($file)
     file_put_contents($dest, $html);
     `prettier --config .prettierrc --write $dest`;
     `sed -i 's/ \/>/>/' $dest`;
+    `sed -i 's/doctype/DOCTYPE/' $dest`;
 }
 
 function build_dir($dir)
