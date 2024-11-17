@@ -1,28 +1,5 @@
 <?php
 
-if (extension_loaded('tidy')) {
-    echo 'Tidy extension is loaded!';
-} else {
-    echo 'Tidy extension is not loaded.';
-}
-
-// chatgpt
-function format_html($html)
-{
-    return $html; //HACK
-    // Create a new Tidy object
-    $tidy = new tidy();
-
-    // Clean and format the HTML
-    $clean_html = $tidy->repairString($html, [
-        'indent' => true,   // Enable indentation
-        'wrap' => 200       // Line wrap length
-    ]);
-
-    // Output the formatted HTML
-    return $clean_html;
-}
-
 function dir_entries($dir)
 {
     return array_diff(scandir($dir), ['.', '..']);

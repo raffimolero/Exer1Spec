@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 
 <?php ob_start(); ?>
-<?= render('form', [
+<?= view('form', [
     'page' => view_path(__FILE__),
     'heading' => 'Register',
     'submit' => 'Register',
     'name' => 'register',
+    /*
+    Molero, Raffi, O.
+    123, Petal Str., Agdao, Davao City
+    0912-345-6789
+    rmolero@addu.edu.ph
+    123!@#OneTwoThree,,
+    123!@#OneTwoThree,,
+    */
     'fields' => [
         ['Name', 'custname', 'text', 'Lastname, Firstname M.', [
             'follow the format Lastname, Firstname, M.' => '/^[A-Z][a-z]*, (?:[A-Z][a-z]* )*[A-Z][a-z]*, [A-Z]\.$/'
@@ -31,7 +39,7 @@
 ]) ?>
 <?php $body = ob_get_clean(); ?>
 
-<?= render('template', [
+<?= view('template', [
     'title' => 'Register',
     'body' => $body,
 ]) ?>

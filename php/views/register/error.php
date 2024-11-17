@@ -1,2 +1,2 @@
 <!DOCTYPE html>
-<?= render('error', []) ?>
+<?= view('error', []) ?>

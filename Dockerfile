@@ -7,10 +7,6 @@ RUN apt-get install -y \
 
 RUN npm install --global prettier @prettier/plugin-php
 
-RUN docker-php-source extract \
-	# do important things \
-	docker-php-source delete
-
 RUN apt-get install -y \
     imagemagick
 

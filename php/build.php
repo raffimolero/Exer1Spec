@@ -46,7 +46,9 @@ function build_view($file)
         return;
     }
     $dest = replace_extension($dest, 'html');
-    file_put_contents($dest, format_html($html));
+    file_put_contents($dest, $html);
+    `prettier --config .prettierrc --write $dest`;
+    `sed -i 's/ \/>/>/' $dest`;
 }
 
 function build_dir($dir)
@@ -78,6 +80,11 @@ function build_models($dir)
 function register_template($name, $base, $path)
 {
     global $templates;
+    dbg([
+        'name' => $name,
+        'base' => $base,
+        'path' => $path,
+    ], 'registering');
 
     if (array_key_exists($name, $templates)) {
         error_log("Redefined $name");
@@ -113,13 +120,11 @@ function build_templates($base, $dir)
     dbg([
         'name' => $name,
         'template' => $template,
-        'exist' => $templates,
-    ], 'before');
+    ], 'building template');
     if ($template) {
         if (file_exists("$dir/_.php")) {
             $template['lib'] = "$dir/_.php";
         }
-        dbg(['name' => $name, 'template' => $template], 'exists');
     }
     foreach (dir_entries($dir) as $entry) {
         $path = "$dir/$entry";
@@ -141,16 +146,10 @@ function build_templates($base, $dir)
     }
     if ($template) {
         $base = $name;
-        dbg($template, "attempting to set $name");
         $templates[$name] = $template;
     }
     foreach ($child_files as $name => $path) {
-        dbg([
-            'name' => $name,
-            'path' => $path,
-            'dir' => $dir
-        ], 'registering');
-        register_template($name, $base, $path,);
+        register_template($name, $base, $path);
     }
     foreach ($child_dirs as $child) {
         build_templates($base, $child);
@@ -176,13 +175,13 @@ function build()
     $build = true;
 
     echo "Downloading assets...\n";
-    mkdir(DEST);
     mkdir(DEST . "/" . ASSETS);
     build_models(MODELS);
     build_templates(null, TEMPLATES);
     // global $templates;
     // dbg($templates);
     build_views('.');
+    $dest = DEST;
     foreach (dir_entries('.') as $path) {
         switch ($path) {
             case MODELS:
