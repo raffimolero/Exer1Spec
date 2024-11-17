@@ -14,6 +14,7 @@
     123!@#OneTwoThree,,
     123!@#OneTwoThree,,
     */
+    'validate' => true,
     'fields' => [
         ['Name', 'custname', 'text', 'Lastname, Firstname M.', [
             'follow the format Lastname, Firstname, M.' => '/^[A-Z][a-z]*, (?:[A-Z][a-z]* )*[A-Z][a-z]*, [A-Z]\.$/'
