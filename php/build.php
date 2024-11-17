@@ -3,7 +3,7 @@
 $build = false;
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
 
-define('DEST', '../' . trim(getenv('TARGET'), '"'));
+define('DEST', trim(getenv('TARGET'), '"'));
 const INDEX = 'index.php';
 const ASSETS = 'assets';
 const MODELS = 'models';
@@ -46,7 +46,7 @@ function build_view($file)
         return;
     }
     $dest = replace_extension($dest, 'html');
-    file_put_contents($dest, $html);
+    file_put_contents($dest, format_html($html));
 }
 
 function build_dir($dir)
