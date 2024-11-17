@@ -1,2 +1,2 @@
 <!DOCTYPE html>
-<?= view('error', ['title' => 'Register']) ?>
+<?= view('error', ['title' => 'Login']) ?>

@@ -23,6 +23,10 @@ function build_file($file)
     if (!filesize($file)) {
         return;
     }
+    // HACK: we won't need this file yet
+    if (str_ends_with($file, 'products.csv')) {
+        return;
+    }
     copy($file, DEST . "/$file");
 }
 

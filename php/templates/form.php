@@ -14,5 +14,5 @@
         <br>
     <?php endforeach; ?>
     <input type="submit" name="<?= $name ?>" id="submit" value="<?= $submit ?>">
-    <?php if ($validate) : ?> $script <?php endif; ?>
+    <?php if ($validate) : ?><?= $script ?><?php endif; ?>
 </form>
