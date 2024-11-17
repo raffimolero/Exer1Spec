@@ -3,4 +3,4 @@ $asset = ASSETS . "/$name.jpeg";
 download_image($url, $asset);
 ?>
 
-<img src="<?= $asset ?>" alt="(image of <?= $name ?>)">
+<img src="<?= "$root/$asset" ?>" alt="(image of <?= $name ?>)">

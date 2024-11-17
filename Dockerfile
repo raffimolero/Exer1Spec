@@ -8,7 +8,8 @@ RUN apt-get install -y \
 RUN npm install --global prettier @prettier/plugin-php
 
 RUN apt-get install -y \
-    imagemagick
+    imagemagick \
+    zip
 
 WORKDIR /app
 COPY ./entrypoint.sh /entrypoint.sh
