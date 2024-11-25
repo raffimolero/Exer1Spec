@@ -1,11 +1,16 @@
 <?php
-function download_image($url, $path)
+function download_image($url, $name)
 {
-    $path = DEST . "/" . $path;
+    $path = ASSETS . "/$name.jpeg";
     if (!file_exists($path)) {
+        dbg([
+            'url' => $url,
+            'path' => $path,
+        ], "Downloading image");
         download($url, $path);
         jpegify($path);
     }
+    return $path;
 }
 
 function jpegify($file)
