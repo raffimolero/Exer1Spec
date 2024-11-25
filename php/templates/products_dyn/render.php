@@ -1,6 +1,7 @@
 <?php
 $file = './models/products.csv';
 if (file_exists($file)) {
+    print '<br>';
     print '<table>';
     $fileHandle = fopen($file, 'r');
     while (($data = fgetcsv($fileHandle)) !== false) {
@@ -16,6 +17,7 @@ if (file_exists($file)) {
         print '</tr>';
     }
     print '</table>';
+    print '<br>';
 } else {
     print '<h1>No Data.</h1>';
 }

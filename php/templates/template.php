@@ -12,9 +12,11 @@
 
 <body>
     <h1>~ Tropixotics ~</h1>
-    <a href="<?= "$root/index.html" ?>">Home</a>
-    <a href="<?= "$root/login.html" ?>">Log in</a>
-    <a href="<?= "$root/register.html" ?>">Register</a>
+    <?= view('links', ['links' => [
+        ['Home', 'index.php'],
+        ['Log in', 'login.html'],
+        ['Register', 'register.html'],
+    ]]) ?>
     <?= $body ?>
     <p>See you soon~</p>
 </body>

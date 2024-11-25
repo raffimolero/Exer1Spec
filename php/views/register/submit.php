@@ -19,7 +19,7 @@ $path = 'error';
 if ($success) {
     fputcsv($fileHandle, $data);
     fclose($fileHandle);
-    $path = 'success';
+    $path = '../login';
 }
 
 print '<meta http-equiv="refresh" content="0; url=' . $path . '.html">';

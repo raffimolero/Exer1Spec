@@ -11,6 +11,10 @@ body {
   text-align: center;
 }
 
+table {
+  display: inline-table;
+}
+
 input {
   width: 15vw;
 }
