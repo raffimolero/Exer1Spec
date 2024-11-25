@@ -15,6 +15,6 @@
 <?php $body = ob_get_clean(); ?>
 
 <?= view('template', [
-    'title' => 'Register',
+    'title' => 'Login',
     'body' => $body,
 ]) ?>
