@@ -249,7 +249,7 @@ function build()
     $assets = DEST . "/" . ASSETS;
     mkdir($assets);
     build_models(MODELS);
-    `cp -r ./assets $assets`;
+    `cp -r ./assets/* $assets`;
     build_templates(null, TEMPLATES);
     build_views('.');
     $dest = DEST;
