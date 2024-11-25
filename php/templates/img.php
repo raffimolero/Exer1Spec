@@ -1,6 +1,5 @@
 <?php
-$asset = ASSETS . "/$name.jpeg";
-download_image($url, $asset);
+$asset = download_image($url, $name);
 ?>
 
 <img src="<?= "$root/$asset" ?>" alt="(image of <?= $name ?>)">

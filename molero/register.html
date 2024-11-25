@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register - Tropixotics</title>
+        <link rel="stylesheet" href="./styles/style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <h1>~ Tropixotics ~</h1>
+        <a href="./index.html">Home</a>
+        <a href="./login.html">Log in</a>
+        <a href="./register.html">Register</a>
+        <h1>Register</h1>
+        <form name="register" action="register/submit.php" onsubmit="return validate()" method="post">
+            <label for="custname">Name:</label>
+            <input id="custname" name="custname" type="text" placeholder="Lastname, Firstname M.">
+            <br>
+            <label for="address">Address:</label>
+            <input id="address" name="address" type="text" placeholder="123, Petal Str., Agdao, Davao City">
+            <br>
+            <label for="number">Number:</label>
+            <input id="number" name="number" type="text" placeholder="09xx-xxx-xxxx">
+            <br>
+            <label for="email">Email:</label>
+            <input id="email" name="email" type="text" placeholder="username@example.com">
+            <br>
+            <label for="password">Password:</label>
+            <input id="password" name="password" type="password" placeholder="strong password">
+            <br>
+            <label for="confirmpassword">Confirm Password:</label>
+            <input id="confirmpassword" name="confirmpassword" type="password" placeholder="re-type password">
+            <br>
+            <input type="submit" name="register" id="submit" value="Register">
+            <script>
+                function validate() {
+                    err = '';
+                    // custname
+                    if (!/^[A-Z][a-z]*, (?:[A-Z][a-z]* )*[A-Z][a-z]*, [A-Z]\.$/.test(custname.value)) {
+                        err += 'Name must follow the format Lastname, Firstname, M.\n';
+                    }
+
+                    // address
+                    if (!/^\w+, [\w \.]+, [\w \.]+, [\w \.]+$/.test(address.value)) {
+                        err += 'Address must follow the format Blk. Street. Barangay, City\n';
+                    }
+
+                    // number
+                    if (!/^09\d{2}-\d{3}-\d{4}$/.test(number.value)) {
+                        err += 'Number must be a valid number like 0912-345-6789\n';
+                    }
+
+                    // email
+                    if (!/^[\w\.]+@\w+(?:\.\w+)+$/.test(email.value)) {
+                        err += 'Email must be a valid email like name@example.com\n';
+                    }
+
+                    // password
+                    if (!/\W/.test(password.value)) {
+                        err += 'Password must contain at least one special character\n';
+                    }
+                    if (!/\d/.test(password.value)) {
+                        err += 'Password must contain at least one digit\n';
+                    }
+                    if (!/[a-z]/.test(password.value)) {
+                        err += 'Password must contain at least one lowercase letter\n';
+                    }
+                    if (!/[A-Z]/.test(password.value)) {
+                        err += 'Password must contain at least one CAPITAL LETTER\n';
+                    }
+                    if (!/.{8}/.test(password.value)) {
+                        err += 'Password must contain at least 8 characters\n';
+                    }
+
+                    // confirmpassword
+                    if (confirmpassword.value !== password.value) {
+                        err += 'Confirm Password must match Password\n';
+                    }
+
+                    success = err === '';
+                    if (success) {
+                        alert('Registered.');
+                    } else {
+                        alert('Failed to register:\n' + err);
+                    }
+                    return success;
+                }
+            </script>
+        </form>
+        <p>See you soon~</p>
+    </body>
+</html>

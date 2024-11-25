@@ -1,6 +1,7 @@
 <?php
 require_once 'models/csv.php';
 require_once 'io.php';
+require_once 'img.php';
 require_once 'util.php';
 
 $templates = [];

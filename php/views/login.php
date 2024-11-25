@@ -8,13 +8,13 @@
     'name' => 'login',
     'validate' => false,
     'fields' => [
-        ['Username', 'email', 'text', 'Your Email'],
-        ['Password', 'password', 'password', 'Your Password'],
+        ['Username', 'email', 'text', 'Your Email', 'rmolero@addu.edu.ph'],
+        ['Password', 'password', 'password', 'Your Password', '123!@#OneTwoThree,,'],
     ],
 ]) ?>
 <?php $body = ob_get_clean(); ?>
 
 <?= view('template', [
-    'title' => 'Register',
+    'title' => 'Login',
     'body' => $body,
 ]) ?>

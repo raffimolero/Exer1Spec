@@ -24,16 +24,22 @@ function build_file($file)
     if (!filesize($file)) {
         return;
     }
-    // HACK: we won't need this file yet
-    if (str_ends_with($file, 'products.csv')) {
-        return;
-    }
     copy($file, DEST . "/$file");
 }
 
-function is_template($file)
+function template_kind($file)
 {
-    return str_ends_with($file, '.php') and str_starts_with(fgets(fopen($file, 'r')), '<!DOCTYPE html>');
+    if (!str_ends_with($file, '.php')) {
+        return 'raw';
+    }
+    $contents = file_get_contents($file);
+    if (str_starts_with($contents, '<!DOCTYPE html>')) {
+        return 'html';
+    }
+    if (str_starts_with($contents, '<?php ?>')) {
+        return 'php';
+    }
+    return 'raw';
 }
 
 function path_to_root($path)
@@ -42,12 +48,25 @@ function path_to_root($path)
     return $depth <= 0 ? '.' : '..' . str_repeat('/..', $depth - 1);
 }
 
+function embed($file, $indent)
+{
+    $data = file_get_contents($file);
+    $txt = '';
+    $lines = preg_split("/((\r?\n)|(\r\n?))/", $data);
+    array_shift($lines);
+    foreach ($lines as $line) {
+        $txt = "$txt$indent$line\n";
+    }
+    return trim($txt);
+}
+
 function build_view($file)
 {
     dbg($file, 'building view...');
     $dest = DEST . "/$file";
     $src = "views/$file";
-    if (!is_template($src)) {
+    $kind = template_kind($src);
+    if ($kind === 'raw') {
         copy($src, $dest);
         return;
     }
@@ -64,6 +83,42 @@ function build_view($file)
     `prettier --config .prettierrc --write $dest`;
     `sed -i 's/ \/>/>/' $dest`;
     `sed -i 's/doctype/DOCTYPE/' $dest`;
+
+    // replace html with print statements
+    if ($kind !== 'php') {
+        return;
+    }
+    `sed -i 's/<?php ?>/<!DOCTYPE html>/' $dest`;
+
+    $separator = "\r\n";
+    $html = file_get_contents($dest);
+    $php = '<?php';
+    foreach (preg_split("/((\r?\n)|(\r\n?))/", $html) as $line) {
+        if (preg_match('/( *)<embed src="(.*)">/', $line, $m)) {
+            [$_, $indent, $embed] = $m;
+            // an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp
+            global $templates;
+            $embed = $templates[$embed]['path'];
+            $line = embed($embed, '');
+        } else {
+            $line = addcslashes(trim($line, ' '), '\\\'');
+            if ($line === '') {
+                continue;
+            }
+            $line = "print '$line';";
+        }
+        $php = "$php\n$line";
+    }
+    $php = "$php\n?>";
+
+    `rm $dest`;
+    $dest = replace_extension($dest, 'php');
+    file_put_contents($dest, $php);
+}
+
+function build_model($path)
+{
+    csv_build(pathinfo($path)['filename']);
 }
 
 function build_dir($dir)
@@ -86,8 +141,8 @@ function build_models($dir)
         $path = "$dir/$entry";
         if (is_dir($path)) {
             build_views($path);
-        } else if (!str_ends_with($entry, '.php')) {
-            build_file($path);
+        } else if (str_ends_with($entry, '.csv')) {
+            build_model($path, remove_extension($entry));
         }
     }
 }
@@ -191,15 +246,16 @@ function build()
 
     echo "Downloading assets...\n";
     mkdir(DEST);
-    mkdir(DEST . "/" . ASSETS);
+    $assets = DEST . "/" . ASSETS;
+    mkdir($assets);
     build_models(MODELS);
+    `cp -r ./assets/* $assets`;
     build_templates(null, TEMPLATES);
-    // global $templates;
-    // dbg($templates);
     build_views('.');
     $dest = DEST;
     foreach (dir_entries('.') as $path) {
         switch ($path) {
+            case ASSETS:
             case MODELS:
             case TEMPLATES:
             case VIEWS:
