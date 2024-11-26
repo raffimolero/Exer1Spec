@@ -7,7 +7,6 @@
 TODO:
 - category sorting
 - category deduplication
-- login cookies
 -->
 
 <?= view('template', [

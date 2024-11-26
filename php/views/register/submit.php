@@ -7,6 +7,8 @@ $keys = array(
     'number',
 );
 
+setcookie('email', $_POST['email'], 0, '/');
+
 $data = array();
 foreach ($keys as $key) {
     $data[] = $_POST[$key];

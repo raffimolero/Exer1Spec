@@ -9,11 +9,14 @@
         <?php foreach ($fields as [$label, $id, $type, $placeholder, $example]) : ?>
             <tr>
                 <td><label for="<?= $id ?>"><?= $label ?>: </label></td>
-                <td><input
+                <td>
+                    <input
                         id="<?= $id ?>"
                         name="<?= $id ?>"
                         type="<?= $type ?>"
-                        placeholder="<?= $placeholder ?>"></td>
+                        placeholder="<?= $placeholder ?>"
+                        <?php if ($id === 'email') : ?> embed="cookie" <?php endif; ?>>
+                </td>
                 <td><?= $example ?></td>
             </tr>
         <?php endforeach; ?>

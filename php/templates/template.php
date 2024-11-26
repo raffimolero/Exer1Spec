@@ -13,11 +13,9 @@
 <body>
     <h1>~ Tropixotics ~</h1>
     <embed src="welcome">
-    <?= view('links', ['links' => [
-        ['Home', 'index.php'],
-        isset($_COOKIE['name']) ? ['Log out', 'logout.php'] : ['Log in', 'login.php'],
-        ['Register', 'register.php'],
-    ]]) ?>
+    <a href="<?= "$root/index.php" ?>">Home</a>
+    <embed src="loginout">
+    <a href="<?= "$root/register.php" ?>">Register</a>
     <?= $body ?>
     <p>See you soon~</p>
 </body>

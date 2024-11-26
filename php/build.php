@@ -60,6 +60,35 @@ function embed($file, $indent)
     return trim($txt);
 }
 
+function pront($line)
+{
+    $line = addcslashes(trim($line, ' '), '\\\'');
+    if ($line === '') {
+        return '';
+    }
+    return "print '$line';";
+}
+
+function php_escape($html)
+{
+    $php = '';
+    foreach (preg_split("/((\r?\n)|(\r\n?))/", $html) as $line) {
+        if (preg_match('/(.*)(?:<embed src="(.*)">|embed="(.*)")(.*)/', $line, $m)) {
+            [$_, $pre, $embed_tag, $embed_attr, $post] = $m;
+            $embed = $embed_tag ?: $embed_attr;
+            // an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp
+            global $templates;
+            $embed = $templates[$embed]['path'];
+            append($php, pront($pre));
+            append($php, embed($embed, ''));
+            append($php, pront($post));
+        } else {
+            append($php, pront($line));
+        }
+    }
+    return trim($php);
+}
+
 function build_view($file)
 {
     dbg($file, 'building view...');
@@ -90,27 +119,9 @@ function build_view($file)
     }
     `sed -i 's/<?php ?>/<!DOCTYPE html>/' $dest`;
 
-    $separator = "\r\n";
     $html = file_get_contents($dest);
-    $php = '<?php';
-    foreach (preg_split("/((\r?\n)|(\r\n?))/", $html) as $line) {
-        if (preg_match('/( *)<embed src="(.*)">/', $line, $m)) {
-            [$_, $indent, $embed] = $m;
-            // an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp
-            global $templates;
-            $embed = $templates[$embed]['path'];
-            $line = embed($embed, '');
-        } else {
-            $line = addcslashes(trim($line, ' '), '\\\'');
-            if ($line === '') {
-                continue;
-            }
-            $line = "print '$line';";
-        }
-        $php = "$php\n$line";
-    }
-    $php = "$php\n?>";
-
+    $escaped = php_escape($html);
+    $php = "<?php\n$escaped\n?>";
     `rm $dest`;
     $dest = replace_extension($dest, 'php');
     file_put_contents($dest, $php);

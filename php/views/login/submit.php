@@ -1,16 +1,19 @@
 <?php
-$email = $_POST['email'];
-$password = $_POST['password'];
-
-$fileHandle = fopen('../models/customers.csv', 'r');
-
+$user_email = $_POST['email'];
+$user_password = $_POST['password'];
 $path = 'register.php';
-if ($fileHandle !== false) {
+
+$file = '../models/customers.csv';
+if (file_exists($file) && ($fileHandle = fopen($file, 'r')) !== false) {
     while (($data = fgetcsv($fileHandle)) !== false) {
-        if ($data[0] === $email && $data[1] === $password) {
+        $found_email = $data[0];
+        $found_password = $data[1];
+        $found_name = $data[2];
+        if ($found_email === $user_email && $found_password === $user_password) {
             $path = 'index.php';
-            setcookie('email', $data[0]);
-            setcookie('name', $data[2]);
+            setcookie('email', $found_email, 0, '/');
+            setcookie('name', $found_name, 0, '/');
+            break;
         }
     }
     fclose($fileHandle);
