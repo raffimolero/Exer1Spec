@@ -20,5 +20,15 @@
     </table>
     <br>
     <input type="submit" name="<?= $name ?>" id="submit" value="<?= $submit ?>">
-    <?php if ($validate) : ?><?= $script ?><?php endif; ?>
+    <?php if ($validate) : ?>
+        <?php
+        // TODO: cleanup
+        $script = preg_replace("/    (.*)((\r?\n)|(\r\n?))/", '${1}${2}', $script);
+        $script = preg_replace('/<\/?script>/', '', $script);
+        $dest = DEST . '/' . $page . "/script.js";
+        file_put_contents($dest, $script);
+        `prettier --config .prettierrc --write $dest`;
+        ?>
+        <script src="<?= "$page/script.js" ?>"></script>
+    <?php endif; ?>
 </form>
