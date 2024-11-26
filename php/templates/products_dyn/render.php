@@ -1,14 +1,42 @@
 <?php
+
 $file = './models/products.csv';
 if (!file_exists($file)) {
     print '<h1>No Data.</h1>';
     return;
 }
-// TODO: print the categories
 
-// print the main table
+// find unique categories
+$categories = array();
+print '<br>';
+print '<table><tr>';
+$fileHandle = fopen($file, 'r');
+while (($data = fgetcsv($fileHandle)) !== false) {
+    $category = $data[0];
+    $exists = false;
+    foreach ($categories as $existing_category) {
+        if ($category === $existing_category) {
+            $exists = true;
+            break;
+        }
+    }
+    if ($exists) {
+        continue;
+    }
+    $categories[] = $category;
+    print '<th><a href="index.php?category=' . $category . '">' . $category . '</a></th>';
+}
+print '</tr></table>';
+
+// render products
 print '<br>';
 print '<table>';
+print '<tr>';
+print '<th>Category</th>';
+print '<th>Name</th>';
+print '<th>Stock</th>';
+print '<th>Image</th>';
+print '</tr>';
 $fileHandle = fopen($file, 'r');
 while (($data = fgetcsv($fileHandle)) !== false) {
     $category = $data[0];
@@ -29,4 +57,5 @@ while (($data = fgetcsv($fileHandle)) !== false) {
     print '</tr>';
 }
 print '</table>';
+
 print '<br>';
