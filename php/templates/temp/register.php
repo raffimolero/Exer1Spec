@@ -1,6 +1,5 @@
 <?php ?>
-<?php ob_start(); ?>
-<?= view('form', [
+<?php $body = view('form', [
     'page' => view_path(__FILE__),
     'heading' => 'Register',
     'submit' => 'Register',
@@ -30,8 +29,7 @@
             'match Password' => 'confirmpassword.value !== password.value'
         ]],
     ],
-]) ?>
-<?php $body = ob_get_clean(); ?>
+]); ?>
 
 <?= view('template', [
     'title' => 'Register',

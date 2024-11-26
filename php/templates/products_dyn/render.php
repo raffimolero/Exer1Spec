@@ -9,7 +9,7 @@ if (!file_exists($file)) {
 // find unique categories
 $categories = array();
 print '<br>';
-print '<table><tr>';
+print '<div class="categories">';
 $fileHandle = fopen($file, 'r');
 while (($data = fgetcsv($fileHandle)) !== false) {
     $category = $data[0];
@@ -24,9 +24,13 @@ while (($data = fgetcsv($fileHandle)) !== false) {
         continue;
     }
     $categories[] = $category;
-    print '<th><a href="index.php?category=' . $category . '">' . $category . '</a></th>';
+    print '<a href="index.php?category=' . $category . '"><div class="categories hover';
+    if (isset($_GET['category']) && $_GET['category'] === $category) {
+        print ' selected';
+    }
+    print '">' . $category . '</div></a>';
 }
-print '</tr></table>';
+print '</div>';
 
 // render products
 print '<br>';

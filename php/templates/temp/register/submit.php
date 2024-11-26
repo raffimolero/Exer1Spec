@@ -17,7 +17,7 @@ foreach ($keys as $key) {
 $fileHandle = fopen('../models/customers.csv', 'a');
 $success = $fileHandle !== false;
 
-$path = 'error.html';
+$path = '../register.php';
 if ($success) {
     fputcsv($fileHandle, $data);
     fclose($fileHandle);
