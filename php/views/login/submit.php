@@ -4,11 +4,13 @@ $password = $_POST['password'];
 
 $fileHandle = fopen('../models/customers.csv', 'r');
 
-$path = 'register.html';
+$path = 'register.php';
 if ($fileHandle !== false) {
     while (($data = fgetcsv($fileHandle)) !== false) {
         if ($data[0] === $email && $data[1] === $password) {
             $path = 'index.php';
+            setcookie('email', $data[0]);
+            setcookie('name', $data[2]);
         }
     }
     fclose($fileHandle);

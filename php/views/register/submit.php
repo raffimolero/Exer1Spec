@@ -15,11 +15,11 @@ foreach ($keys as $key) {
 $fileHandle = fopen('../models/customers.csv', 'a');
 $success = $fileHandle !== false;
 
-$path = 'error';
+$path = 'error.html';
 if ($success) {
     fputcsv($fileHandle, $data);
     fclose($fileHandle);
-    $path = '../login';
+    $path = '../login.php';
 }
 
-print '<meta http-equiv="refresh" content="0; url=' . $path . '.html">';
+print '<meta http-equiv="refresh" content="0; url=' . $path . '">';

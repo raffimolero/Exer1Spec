@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-
+<?php ?>
 <?php ob_start(); ?>
 <?= view('form', [
     'page' => view_path(__FILE__),
     'heading' => 'Register',
     'submit' => 'Register',
     'name' => 'register',
-    /*
-    Molero, Raffi, O.
-    */
     'validate' => true,
     'fields' => [
         ['Name', 'custname', 'text', 'Lastname, Firstname M.', 'Molero, Raffi, O.', [

@@ -3,7 +3,7 @@
 $build = false;
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
 
-const NAME = 'molero';
+const NAME = 'molero2';
 define('DEST', trim(getenv('TARGET'), '"') . '/' . NAME);
 const INDEX = 'index.php';
 const ASSETS = 'assets';

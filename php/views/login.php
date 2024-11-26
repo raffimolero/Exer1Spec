@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-
+<?php ?>
 <?php ob_start(); ?>
 <?= view('form', [
     'page' => view_path(__FILE__),

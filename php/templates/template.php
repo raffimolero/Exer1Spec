@@ -12,10 +12,11 @@
 
 <body>
     <h1>~ Tropixotics ~</h1>
+    <embed src="welcome">
     <?= view('links', ['links' => [
         ['Home', 'index.php'],
-        ['Log in', 'login.html'],
-        ['Register', 'register.html'],
+        isset($_COOKIE['name']) ? ['Log out', 'logout.php'] : ['Log in', 'login.php'],
+        ['Register', 'register.php'],
     ]]) ?>
     <?= $body ?>
     <p>See you soon~</p>
