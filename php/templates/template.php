@@ -12,11 +12,10 @@
 
 <body>
     <h1>~ Tropixotics ~</h1>
-    <?= view('links', ['links' => [
-        ['Home', 'index.php'],
-        ['Log in', 'login.html'],
-        ['Register', 'register.html'],
-    ]]) ?>
+    <embed src="welcome">
+    <a href="<?= "$root/index.php" ?>">Home</a>
+    <embed src="loginout">
+    <a href="<?= "$root/register.php" ?>">Register</a>
     <?= $body ?>
     <p>See you soon~</p>
 </body>
