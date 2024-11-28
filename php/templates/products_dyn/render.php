@@ -20,15 +20,15 @@ while (($data = fgetcsv($fileHandle)) !== false) {
             break;
         }
     }
-    if ($exists) {
-        continue;
-    }
+    if ($exists) continue;
+
     $categories[] = $category;
-    print '<a href="index.php?category=' . $category . '"><div class="categories hover';
-    if (isset($_GET['category']) && $_GET['category'] === $category) {
-        print ' selected';
-    }
-    print '">' . $category . '</div></a>';
+    $selected = isset($_GET['category']) && $_GET['category'] === $category;
+    if (!$selected) print '<a href="index.php?category=' . $category . '">';
+    print '<div class="hover';
+    if ($selected) print ' selected';
+    print '">' . $category . '</div>';
+    if (!$selected) print '</a>';
 }
 print '</div>';
 

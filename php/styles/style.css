@@ -57,43 +57,43 @@ img {
 .categories {
   width: 100%;
   margin-bottom: 2rem;
+
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .categories a {
   text-decoration: none;
   color: black;
-  padding: 5px;
-}
-
-div.categories.hover.selected {
-  transition: 0.25s;
-  background-color: #a9f396;
-}
-
-div.categories.hover {
-  width: 15rem;
-  height: 3rem;
 }
 
 div.hover {
+  width: 15rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   transition: 0.25s;
   color: black;
+  font-size: medium;
   background-color: #d4ee99;
   border-radius: 5px;
 }
 
-div.hover:hover {
+div.hover:is(:hover, .selected) {
   transition: 0.25s;
-  font-weight: 500;
   color: #3f3f3f;
+  font-size: larger;
   background-color: #b3e07f;
   border-radius: 20px;
 }
 
-.categories a:hover {
-  font-size: larger;
+div.hover.selected {
+  font-weight: bold;
+  background-color: #a9f396;
+  border-radius: 15px;
 }

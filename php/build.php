@@ -257,12 +257,15 @@ function build()
 
     echo "Downloading assets...\n";
     mkdir(DEST);
+    $cache = ASSETS;
+    // rm_rf($cache);
+    if (!file_exists($cache)) {
+        mkdir($cache);
+    }
     $assets = DEST . "/" . ASSETS;
-    rm_rf(ASSETS);
-    mkdir(ASSETS);
     mkdir($assets);
     build_models(MODELS);
-    `cp -r ./assets/* $assets`;
+    `cp -r $cache/* $assets`;
     build_templates(null, TEMPLATES);
     build_views('.');
     $dest = DEST;
