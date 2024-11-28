@@ -1,17 +1,13 @@
 <?php
 
-function append(&$data, $line)
+function dbg($x, ...$xs)
 {
-    if ($line === '') return;
-    $data .= "$line\n";
-}
-
-function dbg($x, $msg = 'no message')
-{
-    error_log("DEBUG: $msg");
-    // error_log("BACKTRACE:");
-    // prettyPrintArray(debug_backtrace());
-    prettyPrintArray($x);
+    var_dump([
+        'DEBUG' => [...$xs],
+        'TRACE' => debug_backtrace(),
+        'VALUE' => $x,
+    ]);
+    error_log('');
     return $x;
 }
 
@@ -25,24 +21,4 @@ function extract_substr($str, $prefix, $suffix)
 
 // chatgpt
 // Function to pretty print an associative array recursively
-function prettyPrintArray($array, $indent = 1)
-{
-    if (is_array($array)) {
-        if ($indent > 3) {
-            error_log(str_repeat("    ", $indent) . "...[" . count($array) . " element(s) omitted]");
-            return;
-        }
-        foreach ($array as $key => $value) {
-            $start = str_repeat("    ", $indent) . $key . " => ";
-            if (is_array($value)) {
-                error_log($start . "[");
-                prettyPrintArray($value, $indent + 1);
-                error_log(str_repeat("    ", $indent) . "]");
-            } else {
-                error_log("$start$value");
-            }
-        }
-    } else {
-        error_log(str_repeat("    ", $indent) . $array);
-    }
-}
+function prettyPrintArray($array, $indent = 1) {}

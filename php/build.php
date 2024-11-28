@@ -250,6 +250,12 @@ function build_views($dir)
     }
 }
 
+function append(&$data, $line)
+{
+    if ($line === '') return;
+    $data .= "$line\n";
+}
+
 function build()
 {
     global $build;
