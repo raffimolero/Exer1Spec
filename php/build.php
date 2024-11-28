@@ -258,6 +258,8 @@ function build()
     echo "Downloading assets...\n";
     mkdir(DEST);
     $assets = DEST . "/" . ASSETS;
+    rm_rf(ASSETS);
+    mkdir(ASSETS);
     mkdir($assets);
     build_models(MODELS);
     `cp -r ./assets/* $assets`;
