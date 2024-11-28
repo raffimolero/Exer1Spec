@@ -51,6 +51,7 @@ function render_direct($_path, $_data, $_once = false)
 function view($view, $data)
 {
     global $templates;
+    $out = '';
 
     while ($view !== null) {
         if (!array_key_exists($view, $templates)) {
@@ -75,7 +76,8 @@ function view($view, $data)
         $data = array_merge($data, $props);
         ['html' => $html, 'data' => $d2] = render_direct($path, $data);
         $data = array_merge($data, $d2);
-        print $html;
+        $out .= $html;
         $view = $template['base'];
     }
+    return $out;
 }

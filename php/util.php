@@ -2,10 +2,8 @@
 
 function append(&$data, $line)
 {
-    if ($line === '') {
-        return;
-    }
-    $data = "$data$line\n";
+    if ($line === '') return;
+    $data .= "$line\n";
 }
 
 function dbg($x, $msg = 'no message')

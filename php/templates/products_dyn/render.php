@@ -21,8 +21,8 @@ while (($data = fgetcsv($fileHandle)) !== false) {
         }
     }
     if ($exists) continue;
-
     $categories[] = $category;
+
     $selected = isset($_GET['category']) && $_GET['category'] === $category;
     if (!$selected) print '<a href="index.php?category=' . $category . '">';
     print '<div class="hover';
