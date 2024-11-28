@@ -15,7 +15,11 @@ function download_image($url, $name)
 
 function jpegify($file)
 {
-    `convert "$file" "$file"`;
+    $w = 256;
+    $h = 256;
+    // https://stackoverflow.com/a/7262050
+    // https://legacy.imagemagick.org/Usage/resize/#shrink
+    `convert -strip -resize {$w}x{$h}\> -interlace Plane -gaussian-blur 0.05 -quality 85% "$file" "$file"`;
 }
 
 // from chatgpt

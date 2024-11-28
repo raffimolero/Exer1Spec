@@ -2,7 +2,7 @@
 
 function dir_entries($dir)
 {
-    return array_diff(scandir($dir), ['.', '..']);
+    return array_diff(scandir($dir) ?: [], ['.', '..']);
 }
 
 // https://stackoverflow.com/a/3338133
