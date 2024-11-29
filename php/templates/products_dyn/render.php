@@ -12,7 +12,7 @@ print '<br>';
 print '<div class="categories">';
 $fileHandle = fopen($file, 'r');
 while (($data = fgetcsv($fileHandle)) !== false) {
-    $category = $data[0];
+    $category = $data[1];
     $exists = false;
     foreach ($categories as $existing_category) {
         if ($category === $existing_category) {
@@ -36,6 +36,7 @@ print '</div>';
 print '<br>';
 print '<table>';
 print '<tr>';
+print '<th>Product ID</th>';
 print '<th>Category</th>';
 print '<th>Name</th>';
 print '<th>Stock</th>';
@@ -43,10 +44,11 @@ print '<th>Image</th>';
 print '</tr>';
 $fileHandle = fopen($file, 'r');
 while (($data = fgetcsv($fileHandle)) !== false) {
-    $category = $data[0];
-    $name = $data[1];
-    $stock = $data[2];
-    $link = $data[3];
+    $id = $data[0];
+    $category = $data[1];
+    $name = $data[2];
+    $stock = $data[3];
+    $link = $data[4];
 
     // filter by category
     if (isset($_GET['category']) && $_GET['category'] !== $category) {
@@ -54,6 +56,7 @@ while (($data = fgetcsv($fileHandle)) !== false) {
     }
 
     print '<tr>';
+    print '<td>' . $id . '</td>';
     print '<td><a href="index.php?category=' . $category . '">' . $category . '</a></td>';
     print '<td><a href="' . $link . '">' . $name . '</a></td>';
     print '<td>' . $stock . '</td>';
