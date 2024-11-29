@@ -1,34 +1,49 @@
 <?php
 
+// load products data
 $file = './models/products.csv';
-if (!file_exists($file)) {
+$fileHandle = fopen($file, 'r');
+if (!$fileHandle) {
     print '<h1>No Data.</h1>';
     return;
 }
 
+$products = array();
+while (($row = fgetcsv($fileHandle)) !== false) {
+    $products[] = $row;
+}
+fclose($fileHandle);
+
 // find unique categories
 $categories = array();
-print '<br>';
-print '<div class="categories">';
-$fileHandle = fopen($file, 'r');
-while (($data = fgetcsv($fileHandle)) !== false) {
-    $category = $data[1];
-    $exists = false;
-    foreach ($categories as $existing_category) {
-        if ($category === $existing_category) {
-            $exists = true;
+$i = 0;
+while ($i < count($products)) {
+    $j = 0;
+    $isUnique = true;
+    while ($j < count($categories)) {
+        if ($products[$i][0] == $categories[$j]) {
+            $isUnique = false;
             break;
         }
+        $j++;
     }
-    if ($exists) continue;
-    $categories[] = $category;
+    if ($isUnique) {
+        $categories[] = $products[$i][0];
+    }
+    $i++;
+}
 
-    $selected = isset($_GET['category']) && $_GET['category'] === $category;
-    if (!$selected) print '<a href="index.php?category=' . $category . '">';
+print '<br>';
+print '<div class="categories">';
+for ($i = 0; $i < count($categories); $i++) {
+    $category = $categories[$i];
+
+    $isSelected = isset($_GET['category']) && $_GET['category'] === $category;
+    if (!$isSelected) print '<a href="index.php?category=' . $category . '">';
     print '<div class="hover';
-    if ($selected) print ' selected';
+    if ($isSelected) print ' selected';
     print '">' . $category . '</div>';
-    if (!$selected) print '</a>';
+    if (!$isSelected) print '</a>';
 }
 print '</div>';
 
@@ -42,13 +57,12 @@ print '<th>Name</th>';
 print '<th>Stock</th>';
 print '<th>Image</th>';
 print '</tr>';
-$fileHandle = fopen($file, 'r');
-while (($data = fgetcsv($fileHandle)) !== false) {
-    $id = $data[0];
-    $category = $data[1];
-    $name = $data[2];
-    $stock = $data[3];
-    $link = $data[4];
+
+for ($id = 0; $id < count($products); $id++) {
+    $category = $products[$id][0];
+    $name = $products[$id][1];
+    $stock = $products[$id][2];
+    $link = $products[$id][3];
 
     // filter by category
     if (isset($_GET['category']) && $_GET['category'] !== $category) {

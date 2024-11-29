@@ -8,3 +8,4 @@ if ($name !== '') {
 } else {
     print '<h3>Welcome, guest!</h3>';
 }
+//

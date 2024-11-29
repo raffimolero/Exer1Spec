@@ -1,13 +1,9 @@
 <?php
 
-$id = -1;
-
 $model_maps = [
     'products' => function ($category, $name, $stock, $image, $link) {
-        global $id;
         download_image($image, $name);
-        $id++;
-        return [$id, $category, $name, $stock, $link];
+        return [$category, $name, $stock, $link];
     },
 ];
 

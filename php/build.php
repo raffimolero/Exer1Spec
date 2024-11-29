@@ -53,35 +53,39 @@ function embed($file, $indent)
     $data = file_get_contents($file);
     $txt = '';
     $lines = preg_split("/((\r?\n)|(\r\n?))/", $data);
-    array_shift($lines);
+    if ($lines[array_key_last($lines)] === '//') {
+        $lines[array_key_last($lines)] = '?>';
+    }
     foreach ($lines as $line) {
         $txt = "$txt$indent$line\n";
     }
-    return trim($txt);
+    $txt = trim($txt);
+    return "$indent$txt";
 }
 
 function pront($line)
 {
-    $line = addcslashes(trim($line, ' '), '\\\'');
-    if ($line === '') {
-        return '';
-    }
-    return "print '$line';";
+    return $line;
+    // $line = addcslashes(trim($line, ' '), '\\\'');
+    // if ($line === '') {
+    //     return '';
+    // }
+    // return "print '$line';";
 }
 
 function php_escape($html)
 {
     $php = '';
     foreach (preg_split("/((\r?\n)|(\r\n?))/", $html) as $line) {
-        if (preg_match('/(.*)(?:<embed src="(.*)">|embed="(.*)")(.*)/', $line, $m)) {
-            [$_, $pre, $embed_tag, $embed_attr, $post] = $m;
+        if (preg_match('/( *)(.*)(?:<embed src="(.*)">|embed="(.*)")(.*)/', $line, $m)) {
+            [$_, $indent, $pre, $embed_tag, $embed_attr, $post] = $m;
             $embed = $embed_tag ?: $embed_attr;
             // an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp
             global $templates;
             $embed = $templates[$embed]['path'];
-            append($php, pront($pre));
-            append($php, embed($embed, ''));
-            append($php, pront($post));
+            append($php, pront("$indent$pre"));
+            append($php, embed($embed, $indent));
+            append($php, pront("$post"));
         } else {
             append($php, pront($line));
         }
@@ -121,7 +125,7 @@ function build_view($file)
 
     $html = file_get_contents($dest);
     $escaped = php_escape($html);
-    $php = "<?php\n$escaped\n?>";
+    $php = "$escaped";
     `rm $dest`;
     $dest = replace_extension($dest, 'php');
     file_put_contents($dest, $php);
