@@ -13,15 +13,30 @@ function ob(callable $f)
     return ob_get_clean();
 }
 
-function dbg(mixed $x, mixed ...$xs)
-{
-    error_log('DEBUG:');
-    error_log(...$xs);
-    error_log(ob(fn() => debug_print_backtrace()));
+const AB = ['A', 'B'];
+const EXPECT = ['Actual', 'Expect'];
+const OLDNEW = ['Old', 'New'];
 
+function dbg_eq(mixed $a, mixed $b, ?array $keys = AB)
+{
+    dbg(
+        [
+            $keys[0] => $a,
+            $keys[1] => $b,
+        ],
+        $a === $b ? 'Values were equal as expected' : 'Warning: Values were expected to equal, but were not.',
+    );
+    return $a;
+}
+
+function dbg(mixed $x, ?string $msg)
+{
+    error_log("[ DEBUG ]");
+    // error_log(ob(fn() => debug_print_backtrace()));
+    error_log("MESSAGE: $msg");
     error_log('VALUE:');
     error_log(print_r($x, true));
-    error_log('');
+    error_log('[ /DEBUG ]');
     return $x;
 }
 
