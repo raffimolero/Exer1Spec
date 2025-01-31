@@ -37,7 +37,8 @@ function remove_extension($path)
 
 function replace_extension($path, $ext)
 {
-    return path_heckery($path, PATHINFO_DIRNAME, PATHINFO_FILENAME, ".$ext");
+    dbg(pathinfo($path)['filename'], 'file name');
+    return path_heckery($path, PATHINFO_DIRNAME, PATHINFO_FILENAME) . ".$ext";
 }
 
 // https://stackoverflow.com/a/724449
