@@ -52,11 +52,21 @@ while ($i < count($products)) {
 <br>
 <table>
     <tr>
-        <th>Product ID</th>
-        <th>Category</th>
-        <th>Name</th>
-        <th>Stock</th>
-        <th>Image</th>
+        <th>
+            <h1>Product ID</h1>
+        </th>
+        <th>
+            <h1>Category</h1>
+        </th>
+        <th>
+            <h1>Name</h1>
+        </th>
+        <th>
+            <h1>Stock</h1>
+        </th>
+        <th>
+            <h1>Image</h1>
+        </th>
     </tr>
     <?php
     for ($id = 0; $id < count($products); $id++) {
@@ -71,10 +81,10 @@ while ($i < count($products)) {
         }
 
         print '<tr>';
-        print '<td>' . $id . '</td>';
-        print '<td><a href="index.php?category=' . $category . '">' . $category . '</a></td>';
-        print '<td><a href="' . $link . '">' . $name . '</a></td>';
-        print '<td>' . $stock . '</td>';
+        print '<td><h1>' . $id . '</h1></td>';
+        print '<td><h2><a href="index.php?category=' . $category . '">' . $category . '</a></h2></td>';
+        print '<td><h2><a href="' . $link . '">' . $name . '</a></h2></td>';
+        print '<td><h1>' . $stock . '</h1></td>';
         print '<td><a href="./assets/' . $name . '.jpeg' . '"><img src="./assets/' . $name . '.jpeg" alt="(image of ' . $name . ')"></a></td>';
         print '</tr>';
     }

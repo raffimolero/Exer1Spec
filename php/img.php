@@ -15,8 +15,8 @@ function download_image($url, $name)
 
 function jpegify($file)
 {
-    $w = 256;
-    $h = 256;
+    $w = 1024;
+    $h = 1024;
     // https://stackoverflow.com/a/7262050
     // https://legacy.imagemagick.org/Usage/resize/#shrink
     `convert -strip -resize {$w}x{$h}\> -interlace Plane -gaussian-blur 0.05 -quality 85% "$file" "$file"`;
