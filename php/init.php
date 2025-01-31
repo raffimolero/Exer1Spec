@@ -64,7 +64,7 @@ function view($view, $data)
         $path = $template['path'];
         if ($template['lib']) {
             $d2 = render_direct($template['lib'], $data, true)['data'];
-            $data = array_merge($data, $d2,);
+            $data = array_merge($data, $d2);
         }
 
         $props = array_map(

@@ -35,6 +35,20 @@ i'm convinced this program is actual black magic. like, i haven't seen anything 
 
 harry potter says expelliarmus. i say `Windows -> Batch -> Docker -> weird php -> worse php`. we are not the same.
 
+# Site Walkthrough
+
+- click the cool buttons
+- click the images and links
+- click the login page button and intentionally fail at logging in, redirecting you to the register page
+- attempt to register without typing anything, so the server complains
+- register properly by copy pasting the data next to each box, redirecting you to the login page if you did it right
+- intentionally fail at logging in again, redirecting you to the register page
+- click the login page button and actually log in properly, redirecting you to the home page with your name in the top left
+- click the logout button, reverting you back to guest
+- log in again or register a different user idk whatever just mess around and mind what happens
+
+# Technical Tomfoolery
+
 - The `molero/` folder contains the Exercise 1 project, which was compiled some time ago.
 - The `php/` folder contains the rest of the code used to compile the `target/$OUTNAME/` directory. It includes:
   - `assets/`: Stores/caches the assets downloaded in each php file, such as `php/img.php`.

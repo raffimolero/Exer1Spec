@@ -13,7 +13,7 @@ const VIEWS = 'views';
 
 function view_path($file)
 {
-    $prefix = join_paths(__DIR__, VIEWS);
+    $prefix = join_paths(__DIR__, VIEWS, '');
     $suffix = '.php';
     return extract_substr($file, $prefix, $suffix);
 }
