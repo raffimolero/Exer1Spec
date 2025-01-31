@@ -1,2 +1,3 @@
 target/*
-**/assets/*
+php/assets/*
+target/**/assets/*
