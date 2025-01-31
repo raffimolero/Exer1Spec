@@ -1,5 +1,7 @@
 # from bad php to worse php
 
+![image of the home page](_/home%20page.png)
+
 This is a project designed to comply with some really weird specification set for a school project.
 Apparently we weren't allowed to use the latest PHP features and had to use PHP print statements to print out HTML,
 instead of just putting the PHP inside of the HTML like it was designed to do from the very moment it was created.
