@@ -6,8 +6,16 @@ please install Git, WSL and Docker Desktop before running this command to clone 
     git clone https://github.com/raffimolero/Exer1Spec.git
     cd Exer1Spec
 
-After that, type `./run` (Windows) or `./run.sh` (Unix) to run the program.
-This should automatically start up Docker Desktop (Windows) and run the server.
+After that, if you're on Windows:
+
+- run the Docker Desktop application
+- `./run`
+
+If you're on Linux/Mac:
+
+- `./run.sh`
+
+This should automatically compile the Weird PHP into the Dumb PHP and run the server.
 Once it's done, simply follow the link printed in the terminal.
 
 You can configure the port and the output filename in the `.env` file.
