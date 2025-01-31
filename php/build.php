@@ -297,7 +297,7 @@ function build()
     `cd $dest && zip -r ../$name.zip *`;
     echo "Done.\n";
     $port = getenv('PORT');
-    echo "Site up and running at: http://localhost:$port/$name/index.php\n";
+    echo "Site up and running at: http://localhost:$port/$name/\n";
 
     $build = false;
 }

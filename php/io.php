@@ -1,8 +1,5 @@
 <?php
 
-use function PHPSTORM_META\map;
-use function PHPSTORM_META\type;
-
 function dir_entries(string $dir): array
 {
     return array_diff(scandir($dir) ?: [], ['.', '..']);
