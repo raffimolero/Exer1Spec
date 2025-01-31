@@ -7,6 +7,8 @@ $keys = array(
     'number',
 );
 
+setcookie('email', $_POST['email'], 0, '/');
+
 $data = array();
 foreach ($keys as $key) {
     $data[] = $_POST[$key];
@@ -15,11 +17,11 @@ foreach ($keys as $key) {
 $fileHandle = fopen('../models/customers.csv', 'a');
 $success = $fileHandle !== false;
 
-$path = 'error';
+$path = '../register.php';
 if ($success) {
     fputcsv($fileHandle, $data);
     fclose($fileHandle);
-    $path = 'success';
+    $path = '../login.php';
 }
 
-print '<meta http-equiv="refresh" content="0; url=' . $path . '.html">';
+print '<meta http-equiv="refresh" content="0; url=' . $path . '">';

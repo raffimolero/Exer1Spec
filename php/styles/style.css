@@ -1,24 +1,99 @@
 body {
-  padding: 25px;
-  text-align: center;
+    text-align: center;
 }
 
 * {
-  font-family: 'Varela Round', serif;
-  font-weight: 400;
-  font-style: normal;
-  padding: 5px;
-  text-align: center;
+    font-family: 'Varela Round', serif;
+    font-weight: 400;
+    font-style: normal;
+    padding: 0;
+    text-align: center;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+table {
+    display: inline-table;
 }
 
 input {
-  width: 15vw;
+    width: 15vw;
 }
 
 .title {
-  color: #5c6ac4;
+    color: #5c6ac4;
 }
 
 img {
-  height: 10vh;
+    height: 20vh;
+}
+
+.header h1 {
+    font-weight: bold;
+    color: white;
+}
+
+.mainContainer {
+    width: 100%;
+    height: 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(112, 214, 129);
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.mainContainer .subContainer2 {
+    display: flex;
+    gap: 6rem;
+}
+
+.subContainer2 a {
+    text-decoration: none;
+    color: #0c1016;
+}
+
+.categories {
+    width: 100%;
+    margin-bottom: 2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.categories a {
+    text-decoration: none;
+    color: black;
+}
+
+div.hover {
+    width: 15rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: 0.25s;
+    color: black;
+    font-size: medium;
+    background-color: #d4ee99;
+    border-radius: 5px;
+}
+
+div.hover:is(:hover, .selected) {
+    transition: 0.25s;
+    color: #3f3f3f;
+    font-size: larger;
+    background-color: #b3e07f;
+    border-radius: 20px;
+}
+
+div.hover.selected {
+    font-weight: bold;
+    background-color: #a9f396;
+    border-radius: 15px;
 }

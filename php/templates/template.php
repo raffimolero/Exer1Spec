@@ -11,12 +11,24 @@
 </head>
 
 <body>
-    <h1>~ Tropixotics ~</h1>
-    <a href="<?= "$root/index.html" ?>">Home</a>
-    <a href="<?= "$root/login.html" ?>">Log in</a>
-    <a href="<?= "$root/register.html" ?>">Register</a>
+    <div class="mainContainer">
+        <div class="subContainer1">
+            <div class="header">
+                <h1>~ Tropixotics ~</h1>
+            </div>
+            <embed src="welcome">
+        </div>
+        <div class="subContainer2">
+            <a href="<?= "$root/index.php" ?>">Home</a>
+            <embed src="loginout">
+            <a href="<?= "$root/register.php" ?>">Register</a>
+        </div>
+
+    </div>
+
     <?= $body ?>
-    <p>See you soon~</p>
+    <?= $footer ?>
+
 </body>
 
 </html>

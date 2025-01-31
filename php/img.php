@@ -1,16 +1,25 @@
 <?php
-function download_image($url, $path)
+function download_image($url, $name)
 {
-    $path = DEST . "/" . $path;
+    $path = ASSETS . "/$name.jpeg";
     if (!file_exists($path)) {
+        dbg([
+            'url' => $url,
+            'path' => $path,
+        ], "Downloading image");
         download($url, $path);
         jpegify($path);
     }
+    return $path;
 }
 
 function jpegify($file)
 {
-    `convert "$file" "$file"`;
+    $w = 1024;
+    $h = 1024;
+    // https://stackoverflow.com/a/7262050
+    // https://legacy.imagemagick.org/Usage/resize/#shrink
+    `convert -strip -resize {$w}x{$h}\> -interlace Plane -gaussian-blur 0.05 -quality 85% "$file" "$file"`;
 }
 
 // from chatgpt

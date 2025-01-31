@@ -1,36 +1,44 @@
 <?php
 
-function dir_entries($dir)
+use function PHPSTORM_META\map;
+use function PHPSTORM_META\type;
+
+function dir_entries(string $dir): array
 {
-    return array_diff(scandir($dir), ['.', '..']);
+    return array_diff(scandir($dir) ?: [], ['.', '..']);
 }
 
-// https://stackoverflow.com/a/3338133
-function rm_rf($dir)
+function join_paths(...$paths): string
 {
-    foreach (dir_entries($dir) as $file) {
-        $path = "$dir/$file";
-        if (is_dir($path) && !is_link($path)) {
-            rm_rf($path);
-        } else {
-            unlink($path);
-        }
-    }
-    return rmdir($dir);
+    $out = join('/', $paths);
+    $out = preg_replace('/[\\/]+/', DIRECTORY_SEPARATOR, $out);
+    return $out;
+}
+
+function path_heckery($path, ...$heckery)
+{
+    $info = pathinfo($path);
+    $map = [
+        PATHINFO_DIRNAME => 'dirname',
+        PATHINFO_FILENAME => 'filename',
+        PATHINFO_BASENAME => 'basename',
+        PATHINFO_EXTENSION => 'extension',
+    ];
+    $heckify = fn($heck) => $info[$map[$heck] ?? null] ?? $heck;
+    $hecked = array_map($heckify, $heckery);
+    return join_paths(DIRECTORY_SEPARATOR, ...$hecked);
 }
 
 // https://stackoverflow.com/questions/193794/how-can-i-change-a-files-extension-using-php#comment31326878_7296238
 function remove_extension($path)
 {
-    $info = pathinfo($path);
-    $dir = $info['dirname'];
-    $name = $info['filename'];
-    return "$dir/$name";
+    return path_heckery($path, PATHINFO_DIRNAME, PATHINFO_FILENAME);
 }
 
 function replace_extension($path, $ext)
 {
-    return remove_extension($path) . ".$ext";
+    dbg(pathinfo($path)['filename'], 'file name');
+    return path_heckery($path, PATHINFO_DIRNAME, PATHINFO_FILENAME) . ".$ext";
 }
 
 // https://stackoverflow.com/a/724449

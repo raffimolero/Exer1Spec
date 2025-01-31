@@ -3,7 +3,7 @@
 $build = false;
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
 
-const NAME = 'molero';
+const NAME = 'molero2';
 define('DEST', trim(getenv('TARGET'), '"') . '/' . NAME);
 const INDEX = 'index.php';
 const ASSETS = 'assets';
@@ -13,7 +13,7 @@ const VIEWS = 'views';
 
 function view_path($file)
 {
-    $prefix = __DIR__ . DIRECTORY_SEPARATOR . VIEWS . DIRECTORY_SEPARATOR;
+    $prefix = join_paths(__DIR__, VIEWS);
     $suffix = '.php';
     return extract_substr($file, $prefix, $suffix);
 }
@@ -24,16 +24,22 @@ function build_file($file)
     if (!filesize($file)) {
         return;
     }
-    // HACK: we won't need this file yet
-    if (str_ends_with($file, 'products.csv')) {
-        return;
-    }
     copy($file, DEST . "/$file");
 }
 
-function is_template($file)
+function template_kind($file)
 {
-    return str_ends_with($file, '.php') and str_starts_with(fgets(fopen($file, 'r')), '<!DOCTYPE html>');
+    if (!str_ends_with($file, '.php')) {
+        return 'raw';
+    }
+    $contents = file_get_contents($file);
+    if (str_starts_with($contents, '<!DOCTYPE html>')) {
+        return 'html';
+    }
+    if (str_starts_with($contents, '<?php ?>')) {
+        return 'php';
+    }
+    return 'raw';
 }
 
 function path_to_root($path)
@@ -42,12 +48,58 @@ function path_to_root($path)
     return $depth <= 0 ? '.' : '..' . str_repeat('/..', $depth - 1);
 }
 
+function embed($file, $indent)
+{
+    $data = file_get_contents($file);
+    $txt = '';
+    $lines = preg_split("/((\r?\n)|(\r\n?))/", $data);
+    if ($lines[array_key_last($lines)] === '//') {
+        $lines[array_key_last($lines)] = '?>';
+    }
+    foreach ($lines as $line) {
+        $txt = "$txt$indent$line\n";
+    }
+    $txt = trim($txt);
+    return "$indent$txt";
+}
+
+function pront($line)
+{
+    return $line;
+    // $line = addcslashes(trim($line, ' '), '\\\'');
+    // if ($line === '') {
+    //     return '';
+    // }
+    // return "print '$line';";
+}
+
+function php_escape($html)
+{
+    $php = '';
+    foreach (preg_split("/((\r?\n)|(\r\n?))/", $html) as $line) {
+        if (preg_match('/( *)(.*)(?:<embed src="(.*)">|embed="(.*)")(.*)/', $line, $m)) {
+            [$_, $indent, $pre, $embed_tag, $embed_attr, $post] = $m;
+            $embed = $embed_tag ?: $embed_attr;
+            // an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp
+            global $templates;
+            $embed = $templates[$embed]['path'];
+            append($php, pront("$indent$pre"));
+            append($php, embed($embed, $indent));
+            append($php, pront("$post"));
+        } else {
+            append($php, pront($line));
+        }
+    }
+    return trim($php);
+}
+
 function build_view($file)
 {
     dbg($file, 'building view...');
     $dest = DEST . "/$file";
     $src = "views/$file";
-    if (!is_template($src)) {
+    $kind = template_kind($src);
+    if ($kind === 'raw') {
         copy($src, $dest);
         return;
     }
@@ -64,6 +116,24 @@ function build_view($file)
     `prettier --config .prettierrc --write $dest`;
     `sed -i 's/ \/>/>/' $dest`;
     `sed -i 's/doctype/DOCTYPE/' $dest`;
+
+    // replace html with print statements
+    if ($kind !== 'php') {
+        return;
+    }
+    `sed -i 's/<?php ?>/<!DOCTYPE html>/' $dest`;
+
+    $html = file_get_contents($dest);
+    $escaped = php_escape($html);
+    $php = "$escaped";
+    `rm $dest`;
+    $dest = replace_extension($dest, 'php');
+    file_put_contents($dest, $php);
+}
+
+function build_model($path)
+{
+    csv_build(pathinfo($path)['filename']);
 }
 
 function build_dir($dir)
@@ -86,8 +156,8 @@ function build_models($dir)
         $path = "$dir/$entry";
         if (is_dir($path)) {
             build_views($path);
-        } else if (!str_ends_with($entry, '.php')) {
-            build_file($path);
+        } else if (str_ends_with($entry, '.csv')) {
+            build_model($path, remove_extension($entry));
         }
     }
 }
@@ -184,6 +254,12 @@ function build_views($dir)
     }
 }
 
+function append(&$data, $line)
+{
+    if ($line === '') return;
+    $data .= "$line\n";
+}
+
 function build()
 {
     global $build;
@@ -191,15 +267,21 @@ function build()
 
     echo "Downloading assets...\n";
     mkdir(DEST);
-    mkdir(DEST . "/" . ASSETS);
+    $cache = ASSETS;
+    // rm_rf($cache);
+    if (!file_exists($cache)) {
+        mkdir($cache);
+    }
+    $assets = DEST . "/" . ASSETS;
+    mkdir($assets);
     build_models(MODELS);
+    `cp -r $cache/* $assets`;
     build_templates(null, TEMPLATES);
-    // global $templates;
-    // dbg($templates);
     build_views('.');
     $dest = DEST;
     foreach (dir_entries('.') as $path) {
         switch ($path) {
+            case ASSETS:
             case MODELS:
             case TEMPLATES:
             case VIEWS:
