@@ -75,7 +75,7 @@ while ($i < count($products)) {
         print '<td><a href="index.php?category=' . $category . '">' . $category . '</a></td>';
         print '<td><a href="' . $link . '">' . $name . '</a></td>';
         print '<td>' . $stock . '</td>';
-        print '<td><a href="' . $link . '"><img src="./assets/' . $name . '.jpeg" alt="(image of ' . $name . ')"></a></td>';
+        print '<td><a href="./assets/' . $name . '.jpeg' . '"><img src="./assets/' . $name . '.jpeg" alt="(image of ' . $name . ')"></a></td>';
         print '</tr>';
     }
     ?>
