@@ -3,7 +3,7 @@
 $build = false;
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
 
-const NAME = 'molero2';
+define('NAME', trim(getenv('OUTNAME'), '"'));
 define('DEST', trim(getenv('TARGET'), '"') . '/' . NAME);
 const INDEX = 'index.php';
 const ASSETS = 'assets';
@@ -296,6 +296,8 @@ function build()
     $name = NAME;
     `cd $dest && zip -r ../$name.zip *`;
     echo "Done.\n";
+    $port = getenv('PORT');
+    echo "Site up and running at: http://localhost:$port/$name/index.php\n";
 
     $build = false;
 }

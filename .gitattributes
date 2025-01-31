@@ -1,0 +1,5 @@
+# Disable core.autocrlf on .sh files
+*.sh text eol=lf
+
+# Keep CRLF for all other files
+* text=auto
