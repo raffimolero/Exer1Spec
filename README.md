@@ -66,7 +66,7 @@ harry potter says expelliarmus. i say `Windows -> Batch -> Docker -> weird php -
   - `views/`: Contains the folder and file structure to follow when building the target application, with some quirks:
     - most files and folders will be copied verbatim. Makes you wonder why I have a separate `styles/` folder.
     - `.php` files that start with `<!DOCTYPE html>` will be rendered into `.html`.
-    - `.php` files that start with `<?php ?> will be rendered, but the file extension will be kept as `.php`.
+    - `.php` files that start with `<?php ?>` will be rendered, but the file extension will be kept as `.php`.
   - Files that are _not_ part of the framework:
     - everything inside of `assets/`, `styles/`, and `views/`: explained earlier
     - everything inside of `models/` except `models/csv.php`
