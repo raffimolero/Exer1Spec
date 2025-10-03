@@ -59,7 +59,7 @@ harry potter says expelliarmus. i say `Windows -> Batch -> Docker -> weird php -
   - `templates/`: Contains all the PHP templates that can be used in each of the views.
     - Each `foo.php` file name is globally available can be used as a template in all views and other templates.
       - You can render a template to `string` with `view('foo', [prop1 => value, prop2 => value])`
-      - Unfortunately if you want to render the body/children of a template, you'll have to record it with `<?php ob_start(); ?>` and `<?php $body = ob_get_clean(); ?>` beacuse php.
+      - Unfortunately if you want to render the body/children of a template, you'll have to record it with `<?php ob_start(); ?>` and `<?php $body = ob_get_clean(); ?>` because php.
       - `foo.php` will have `$prop1` and `$prop2` available within the file.
     - PHP files in subdirectories are passed as props to the parent PHP file if their name starts with a $.
       - For instance, if you have `foo.php` and a `foo/$bar.php`, then the contents of `$bar.php` will be available as `$bar` inside of `foo.php` as if you had called `view('foo', [bar => 'the contents of foo/$bar.php'])`
